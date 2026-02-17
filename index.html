@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NSB Developer | Custom Software Solutions & Business Automation</title>
+    <meta name="description" content="NSB Developer - Custom software development, game development, business automation, ERP solutions by Nouman Shah Bodla">
+    <meta name="keywords" content="software development, game development, ERP, business automation, Pakistan, custom software">
+    <meta name="author" content="Nouman Shah Bodla">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%234facfe' rx='20' width='100' height='100'/><text x='50' y='65' font-size='40' fill='white' text-anchor='middle' font-weight='bold'>NSB</text></svg>">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{--primary:#0066ff;--primary-dark:#0052cc;--secondary:#00ff88;--accent:#ff3366;--dark:#0a0e27;--dark-light:#151932;--gray:#8892b0;--light:#ccd6f6;--white:#e6f1ff;--gradient:linear-gradient(135deg,#667eea 0%,#764ba2 100%);--gradient-2:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);--gradient-3:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%)}
+        body{font-family:'Inter',sans-serif;background:var(--dark);color:var(--light);overflow-x:hidden}
+        
+        .preloader{position:fixed;top:0;left:0;width:100%;height:100%;background:var(--dark);display:flex;justify-content:center;align-items:center;z-index:10000;transition:opacity .5s,visibility .5s}
+        .preloader.hidden{opacity:0;visibility:hidden}
+        .preloader-content{text-align:center}
+        .preloader-logo{font-size:48px;font-weight:900;background:var(--gradient-3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:20px;animation:pulse 1.5s ease-in-out infinite}
+        .preloader-bar{width:200px;height:4px;background:rgba(255,255,255,.1);border-radius:10px;overflow:hidden;margin:0 auto}
+        .preloader-progress{width:0%;height:100%;background:var(--gradient-3);animation:loading 2s ease-in-out}
+        @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+        @keyframes loading{0%{width:0%}100%{width:100%}}
+        
+        header{position:fixed;top:0;left:0;width:100%;padding:20px 0;z-index:1000;transition:all .3s ease}
+        header.scrolled{background:rgba(10,14,39,.95);backdrop-filter:blur(10px);box-shadow:0 5px 30px rgba(0,0,0,.3)}
+        .header-container{max-width:1400px;margin:0 auto;padding:0 40px;display:flex;justify-content:space-between;align-items:center}
+        .logo{display:flex;align-items:center;gap:15px;text-decoration:none}
+        .logo-icon{width:50px;height:50px;background:var(--gradient-3);border-radius:12px;display:flex;justify-content:center;align-items:center;font-weight:900;font-size:20px;color:white;position:relative;overflow:hidden}
+        .logo-icon::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:linear-gradient(45deg,transparent,rgba(255,255,255,.3),transparent);transform:rotate(45deg);animation:shine 3s infinite}
+        @keyframes shine{0%{transform:translateX(-100%) rotate(45deg)}100%{transform:translateX(100%) rotate(45deg)}}
+        .logo-text h1{font-size:22px;font-weight:800;color:var(--white);font-family:'JetBrains Mono',monospace}
+        .logo-text span{font-size:11px;color:var(--secondary);font-weight:600;letter-spacing:2px}
+        nav ul{display:flex;list-style:none;gap:40px}
+        nav a{text-decoration:none;color:var(--light);font-weight:500;font-size:14px;position:relative;transition:color .3s}
+        nav a::after{content:'';position:absolute;bottom:-5px;left:0;width:0;height:2px;background:var(--secondary);transition:width .3s}
+        nav a:hover,nav a.active{color:var(--secondary)}
+        nav a:hover::after,nav a.active::after{width:100%}
+        .cta-btn{padding:12px 30px;background:var(--gradient-3);color:white;text-decoration:none;border-radius:50px;font-weight:600;font-size:14px;transition:all .3s;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:10px}
+        .cta-btn:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,102,255,.4)}
+        .menu-toggle{display:none;flex-direction:column;gap:6px;cursor:pointer;background:none;border:none}
+        .menu-toggle span{width:30px;height:3px;background:var(--white);border-radius:10px;transition:all .3s}
+        .container{max-width:1400px;margin:0 auto;padding:0 40px}
+        
+        .hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;padding-top:80px}
+        .hero-background{position:absolute;top:0;left:0;width:100%;height:100%;z-index:0}
+        .grid-background{position:absolute;width:100%;height:100%;background-image:linear-gradient(rgba(0,255,136,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,136,.03) 1px,transparent 1px);background-size:50px 50px;animation:gridMove 20s linear infinite}
+        @keyframes gridMove{0%{transform:translate(0,0)}100%{transform:translate(50px,50px)}}
+        .floating-shapes{position:absolute;width:100%;height:100%}
+        .shape{position:absolute;border-radius:50%;filter:blur(60px);opacity:.6;animation:float 20s infinite}
+        .shape-1{width:400px;height:400px;background:var(--gradient);top:10%;left:10%;animation-delay:0s}
+        .shape-2{width:300px;height:300px;background:var(--gradient-2);bottom:10%;right:10%;animation-delay:3s}
+        .shape-3{width:250px;height:250px;background:var(--gradient-3);top:50%;right:20%;animation-delay:6s}
+        @keyframes float{0%,100%{transform:translate(0,0) rotate(0deg)}25%{transform:translate(50px,50px) rotate(90deg)}50%{transform:translate(0,100px) rotate(180deg)}75%{transform:translate(-50px,50px) rotate(270deg)}}
+        .hero-container{max-width:1400px;margin:0 auto;padding:0 40px;position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+        .hero-content{animation:fadeInUp 1s ease}
+        .hero-badge{display:inline-block;padding:8px 20px;background:rgba(0,255,136,.1);border:1px solid rgba(0,255,136,.3);border-radius:50px;color:var(--secondary);font-size:13px;font-weight:600;margin-bottom:30px}
+        .hero-content h1{font-size:58px;font-weight:900;line-height:1.2;margin-bottom:20px;background:linear-gradient(135deg,var(--white) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .hero-content .gradient-text{background:var(--gradient-3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .hero-content p{font-size:18px;color:var(--gray);margin-bottom:40px;line-height:1.8}
+        .hero-buttons{display:flex;gap:20px;flex-wrap:wrap}
+        .btn{padding:16px 40px;border-radius:50px;font-weight:600;font-size:16px;text-decoration:none;display:inline-flex;align-items:center;gap:10px;transition:all .3s;border:2px solid transparent;cursor:pointer}
+        .btn-primary{background:var(--gradient-3);color:white}
+        .btn-primary:hover{transform:translateY(-3px);box-shadow:0 15px 40px rgba(0,102,255,.4)}
+        .btn-outline{background:transparent;border-color:var(--secondary);color:var(--secondary)}
+        .btn-outline:hover{background:var(--secondary);color:var(--dark)}
+        .hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;margin-top:60px}
+        .stat-item{text-align:center}
+        .stat-item h3{font-size:36px;font-weight:800;color:var(--secondary);margin-bottom:5px}
+        .stat-item p{font-size:14px;color:var(--gray)}
+        .hero-visual{position:relative;animation:fadeInRight 1s ease}
+        .code-window{background:var(--dark-light);border-radius:20px;overflow:hidden;box-shadow:0 30px 60px rgba(0,0,0,.5)}
+        .code-header{background:rgba(255,255,255,.05);padding:15px 20px;display:flex;align-items:center;gap:8px}
+        .code-dot{width:12px;height:12px;border-radius:50%}
+        .code-dot:nth-child(1){background:#ff5f56}
+        .code-dot:nth-child(2){background:#ffbd2e}
+        .code-dot:nth-child(3){background:#27c93f}
+        .code-body{padding:25px;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:2}
+        .code-line{display:flex;gap:15px}
+        .line-number{color:var(--gray);user-select:none;min-width:20px}
+        .code-keyword{color:#c792ea}
+        .code-function{color:#82aaff}
+        .code-string{color:#c3e88d}
+        .code-comment{color:var(--gray);font-style:italic}
+        @keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes fadeInRight{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+        
+        section{padding:100px 0}
+        .section-header{text-align:center;margin-bottom:60px}
+        .section-badge{display:inline-block;padding:8px 20px;background:rgba(0,255,136,.1);border:1px solid rgba(0,255,136,.3);border-radius:50px;color:var(--secondary);font-size:13px;font-weight:600;margin-bottom:20px}
+        .section-header h2{font-size:42px;font-weight:800;color:var(--white);margin-bottom:20px}
+        .section-header p{font-size:18px;color:var(--gray);max-width:600px;margin:0 auto}
+        
+        .services{padding:100px 0;position:relative}
+        .services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:25px}
+        .service-card{background:var(--dark-light);border-radius:20px;padding:35px;position:relative;overflow:hidden;transition:all .3s;border:1px solid rgba(255,255,255,.05)}
+        .service-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:var(--gradient-3);transform:scaleX(0);transition:transform .3s}
+        .service-card:hover::before{transform:scaleX(1)}
+        .service-card:hover{transform:translateY(-10px);box-shadow:0 20px 50px rgba(0,0,0,.3)}
+        .service-icon{width:65px;height:65px;background:var(--gradient-3);border-radius:15px;display:flex;justify-content:center;align-items:center;font-size:28px;color:white;margin-bottom:20px}
+        .service-card h3{font-size:20px;font-weight:700;color:var(--white);margin-bottom:12px}
+        .service-card p{color:var(--gray);line-height:1.7;font-size:14px}
+        
+        .demos{padding:100px 0;background:var(--dark-light)}
+        .demos-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:30px}
+        .demo-card{background:var(--dark);border-radius:20px;padding:40px;text-align:center;border:1px solid rgba(255,230,109,.1);transition:all .3s;position:relative;overflow:hidden}
+        .demo-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,#FF6B9D,#4ECDC4,#FFE66D);transform:scaleX(0);transition:transform .3s}
+        .demo-card:hover::before{transform:scaleX(1)}
+        .demo-card:hover{transform:translateY(-10px);box-shadow:0 20px 50px rgba(255,230,109,.15)}
+        .demo-icon{width:80px;height:80px;background:linear-gradient(135deg,#FF6B9D,#4ECDC4);border-radius:20px;display:flex;justify-content:center;align-items:center;margin:0 auto 25px;font-size:36px;color:white}
+        .demo-card h3{font-size:22px;font-weight:700;color:var(--white);margin-bottom:15px}
+        .demo-card p{color:var(--gray);line-height:1.7;margin-bottom:25px;font-size:14px}
+        .demo-preview{background:rgba(255,230,109,.1);border:1px solid rgba(255,230,109,.3);border-radius:15px;padding:18px;margin-bottom:25px;display:flex;align-items:center;justify-content:center;gap:10px;color:#FFE66D}
+        .demo-preview i{font-size:22px}
+        .demo-btn{width:100%}
+        
+        .demo-modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.95);z-index:10000;padding:15px;overflow:hidden}
+        .demo-modal.active{display:flex;justify-content:center;align-items:center}
+        .demo-modal-content{background:var(--dark-light);border-radius:20px;width:100%;max-width:100%;height:100%;max-height:100%;display:flex;flex-direction:column;border:1px solid rgba(255,255,255,.1)}
+        .demo-modal-header{padding:15px 25px;border-bottom:1px solid rgba(255,255,255,.1);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+        .demo-modal-header h3{font-size:20px;font-weight:700;color:var(--white);margin:0}
+        .demo-close{width:40px;height:40px;background:rgba(255,255,255,.1);border:none;border-radius:50%;color:var(--white);font-size:20px;cursor:pointer;transition:all .3s}
+        .demo-close:hover{background:var(--accent);transform:rotate(90deg)}
+        .demo-modal-body{flex:1;padding:0;overflow:hidden;position:relative}
+        .demo-modal-body iframe{width:100%;height:100%;border:none;background:#1a1a2e}
+        .demo-modal-footer{padding:15px 25px;border-top:1px solid rgba(255,255,255,.1);display:flex;gap:15px;justify-content:flex-end;flex-shrink:0}
+        
+        .clients{padding:80px 0;background:var(--dark)}
+        .clients-logos{display:flex;justify-content:center;flex-wrap:wrap;gap:30px;margin-bottom:60px}
+        .client-flag{padding:15px 30px;background:var(--dark-light);border-radius:15px;display:flex;align-items:center;gap:12px;font-size:16px;color:var(--light);transition:all .3s;border:1px solid rgba(255,255,255,.05)}
+        .client-flag:hover{transform:translateY(-5px);background:var(--gradient-3);color:white}
+        .client-flag span{font-size:28px}
+        .testimonials-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:25px}
+        .testimonial-card{background:var(--dark-light);border-radius:20px;padding:30px;border:1px solid rgba(255,255,255,.05);transition:all .3s}
+        .testimonial-card:hover{transform:translateY(-5px);box-shadow:0 20px 50px rgba(0,0,0,.3)}
+        .testimonial-header{display:flex;align-items:center;gap:15px;margin-bottom:20px}
+        .testimonial-avatar{width:55px;height:55px;border-radius:50%;background:var(--gradient-3);display:flex;justify-content:center;align-items:center;font-size:22px;font-weight:700;color:white}
+        .testimonial-info h4{font-size:16px;font-weight:600;color:var(--white);margin-bottom:5px}
+        .testimonial-info span{font-size:13px;color:var(--gray)}
+        .testimonial-rating{color:#ffd700;margin-bottom:15px}
+        .testimonial-text{color:var(--gray);line-height:1.7;font-style:italic;font-size:14px}
+        
+        .contact{padding:100px 0;background:var(--dark)}
+        .contact-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:50px}
+        .contact-info h3{font-size:28px;font-weight:700;color:var(--white);margin-bottom:20px}
+        .contact-info>p{color:var(--gray);margin-bottom:35px;line-height:1.8}
+        .contact-details{list-style:none}
+        .contact-detail{display:flex;gap:18px;margin-bottom:25px}
+        .contact-icon{width:50px;height:50px;background:var(--gradient-3);border-radius:50%;display:flex;justify-content:center;align-items:center;flex-shrink:0}
+        .contact-icon i{color:white;font-size:20px}
+        .contact-text h4{font-size:15px;font-weight:600;color:var(--white);margin-bottom:5px}
+        .contact-text p{color:var(--gray);margin:0;font-size:14px}
+        .contact-text a{color:var(--secondary);text-decoration:none}
+        .contact-form{background:var(--dark-light);border-radius:20px;padding:35px;border:1px solid rgba(255,255,255,.05)}
+        .form-group{margin-bottom:20px}
+        .form-group label{display:block;color:var(--light);font-weight:500;margin-bottom:8px;font-size:14px}
+        .form-group input,.form-group textarea,.form-group select{width:100%;padding:14px 18px;background:var(--dark);border:1px solid rgba(255,255,255,.1);border-radius:10px;color:var(--light);font-family:inherit;font-size:15px;transition:all .3s}
+        .form-group input:focus,.form-group textarea:focus,.form-group select:focus{outline:none;border-color:var(--secondary)}
+        .form-group textarea{min-height:120px;resize:vertical}
+        .form-row{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+        .submit-btn{width:100%;padding:16px;background:var(--gradient-3);color:white;border:none;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer;transition:all .3s}
+        .submit-btn:hover{transform:translateY(-3px);box-shadow:0 15px 40px rgba(0,102,255,.4)}
+        
+        footer{background:var(--dark);padding:50px 0 25px;border-top:1px solid rgba(255,255,255,.05)}
+        .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:50px;margin-bottom:50px}
+        .footer-about .logo{margin-bottom:20px}
+        .footer-about p{color:var(--gray);line-height:1.8;margin-bottom:25px;font-size:14px}
+        .social-links{display:flex;gap:12px}
+        .social-link{width:42px;height:42px;background:var(--dark-light);border-radius:50%;display:flex;justify-content:center;align-items:center;color:var(--light);text-decoration:none;transition:all .3s}
+        .social-link:hover{background:var(--gradient-3);color:white;transform:translateY(-3px)}
+        .footer-column h4{font-size:16px;font-weight:600;color:var(--white);margin-bottom:20px}
+        .footer-column ul{list-style:none}
+        .footer-column ul li{margin-bottom:12px}
+        .footer-column ul a{color:var(--gray);text-decoration:none;transition:color .3s;font-size:14px}
+        .footer-column ul a:hover{color:var(--secondary)}
+        .footer-bottom{padding-top:25px;border-top:1px solid rgba(255,255,255,.05);text-align:center}
+        .footer-bottom p{color:var(--gray);font-size:14px}
+        
+        .back-to-top{position:fixed;bottom:25px;right:25px;width:50px;height:50px;background:var(--gradient-3);border-radius:50%;display:flex;justify-content:center;align-items:center;color:white;font-size:20px;cursor:pointer;opacity:0;visibility:hidden;transition:all .3s;z-index:999;border:none}
+        .back-to-top.visible{opacity:1;visibility:visible}
+        .back-to-top:hover{transform:translateY(-5px)}
+        
+        .mobile-nav{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:var(--dark);z-index:999;padding:100px 40px 40px;transform:translateX(-100%);transition:transform .3s}
+        .mobile-nav.active{transform:translateX(0)}
+        .mobile-nav ul{list-style:none}
+        .mobile-nav ul li{margin-bottom:20px}
+        .mobile-nav ul a{color:var(--white);text-decoration:none;font-size:24px;font-weight:600}
+        .mobile-nav-close{position:absolute;top:25px;right:25px;background:none;border:none;color:var(--white);font-size:30px;cursor:pointer}
+        
+        @media(max-width:1200px){.services-grid{grid-template-columns:repeat(2,1fr)}.testimonials-grid{grid-template-columns:repeat(2,1fr)}}
+        @media(max-width:992px){nav,.cta-btn{display:none}.menu-toggle{display:flex}.hero-container{grid-template-columns:1fr}.hero-visual{display:none}.hero-content h1{font-size:42px}.services-grid{grid-template-columns:1fr}.demos-grid{grid-template-columns:1fr}.contact-grid{grid-template-columns:1fr}.footer-grid{grid-template-columns:repeat(2,1fr)}.testimonials-grid{grid-template-columns:1fr}}
+        @media(max-width:768px){.header-container,.container{padding:0 20px}.hero-content h1{font-size:32px}.hero-stats{grid-template-columns:1fr}.section-header h2{font-size:28px}.form-row{grid-template-columns:1fr}.footer-grid{grid-template-columns:1fr}.demo-modal-footer{flex-direction:column}.demo-modal-footer .btn{width:100%}}
+    </style>
+</head>
+<body>
+    <div class="preloader"><div class="preloader-content"><div class="preloader-logo">NSB</div><div class="preloader-bar"><div class="preloader-progress"></div></div></div></div>
+    
+    <div class="mobile-nav" id="mobileNav">
+        <button class="mobile-nav-close" onclick="closeMobileNav()"><i class="fas fa-times"></i></button>
+        <ul>
+            <li><a href="#home" onclick="closeMobileNav()">Home</a></li>
+            <li><a href="#services" onclick="closeMobileNav()">Services</a></li>
+            <li><a href="#demos" onclick="closeMobileNav()">Live Demos</a></li>
+            <li><a href="#clients" onclick="closeMobileNav()">Clients</a></li>
+            <li><a href="#contact" onclick="closeMobileNav()">Contact</a></li>
+        </ul>
+    </div>
+    
+    <header>
+        <div class="header-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">NSB</div>
+                <div class="logo-text">
+                    <h1>&lt;NSB Developer/&gt;</h1>
+                    <span>HOME FOR INNOVATION</span>
+                </div>
+            </a>
+            <nav><ul>
+                <li><a href="#home" class="active">Home</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#demos">Live Demos</a></li>
+                <li><a href="#clients">Clients</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul></nav>
+            <a href="#contact" class="cta-btn"><i class="fas fa-rocket"></i> Get Started</a>
+            <button class="menu-toggle" onclick="openMobileNav()"><span></span><span></span><span></span></button>
+        </div>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="hero-background">
+            <div class="grid-background"></div>
+            <div class="floating-shapes"><div class="shape shape-1"></div><div class="shape shape-2"></div><div class="shape shape-3"></div></div>
+        </div>
+        <div class="hero-container">
+            <div class="hero-content">
+                <span class="hero-badge">🚀 Welcome to NSB Developer</span>
+                <h1>We Build <span class="gradient-text">Digital Solutions</span> That Transform Business</h1>
+                <p>Custom software development, game development, business automation, ERP systems, and innovative tools designed to solve your unique challenges digitally.</p>
+                <div class="hero-buttons">
+                    <a href="#contact" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Start Your Project</a>
+                    <a href="#demos" class="btn btn-outline"><i class="fas fa-gamepad"></i> Try Live Demos</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item"><h3>150+</h3><p>Projects Completed</p></div>
+                    <div class="stat-item"><h3>50+</h3><p>Happy Clients</p></div>
+                    <div class="stat-item"><h3>100%</h3><p>Satisfaction Rate</p></div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="code-window">
+                    <div class="code-header"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div>
+                    <div class="code-body">
+                        <div class="code-line"><span class="line-number">1</span><span><span class="code-keyword">const</span> <span class="code-function">NSBDeveloper</span> = () =&gt; {</span></div>
+                        <div class="code-line"><span class="line-number">2</span><span>&nbsp;&nbsp;<span class="code-keyword">return</span> {</span></div>
+                        <div class="code-line"><span class="line-number">3</span><span>&nbsp;&nbsp;&nbsp;&nbsp;name: <span class="code-string">'NSB Developer'</span>,</span></div>
+                        <div class="code-line"><span class="line-number">4</span><span>&nbsp;&nbsp;&nbsp;&nbsp;founder: <span class="code-string">'Nouman Shah'</span>,</span></div>
+                        <div class="code-line"><span class="line-number">5</span><span>&nbsp;&nbsp;&nbsp;&nbsp;skills: [</span></div>
+                        <div class="code-line"><span class="line-number">6</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-string">'Custom Software'</span>,</span></div>
+                        <div class="code-line"><span class="line-number">7</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-string">'Game Development'</span>,</span></div>
+                        <div class="code-line"><span class="line-number">8</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-string">'Business Automation'</span>,</span></div>
+                        <div class="code-line"><span class="line-number">9</span><span>&nbsp;&nbsp;&nbsp;&nbsp;]</span></div>
+                        <div class="code-line"><span class="line-number">10</span><span>&nbsp;&nbsp;}</span></div>
+                        <div class="code-line"><span class="line-number">11</span><span>}</span></div>
+                        <div class="code-line"><span class="line-number">12</span><span class="code-comment">// Let's innovate together!</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="services" id="services">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Our Services</span>
+                <h2>What We Do Best</h2>
+                <p>Comprehensive digital solutions tailored to your business needs</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card"><div class="service-icon"><i class="fas fa-code"></i></div><h3>Custom Software Development</h3><p>Tailored software solutions built from scratch to match your exact business requirements and workflow.</p></div>
+                <div class="service-card"><div class="service-icon"><i class="fas fa-gamepad"></i></div><h3>Game Development</h3><p>Interactive games and gamification solutions for entertainment, education, and business engagement.</p></div>
+                <div class="service-card"><div class="service-icon"><i class="fas fa-robot"></i></div><h3>Business Automation</h3><p>Streamline operations with intelligent automation solutions including management systems and workflows.</p></div>
+                <div class="service-card"><div class="service-icon"><i class="fas fa-file-invoice"></i></div><h3>Invoice & Billing Systems</h3><p>Professional invoicing systems with automated billing, payment tracking, and financial reporting.</p></div>
+                <div class="service-card"><div class="service-icon"><i class="fas fa-database"></i></div><h3>Database Systems</h3><p>Robust database solutions for efficient data management, storage, and retrieval with cloud integration.</p></div>
+                <div class="service-card"><div class="service-icon"><i class="fas fa-chart-line"></i></div><h3>ERP Solutions</h3><p>Complete enterprise resource planning systems to manage all aspects of your business operations.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="demos" id="demos">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Live Demos</span>
+                <h2>Try Our Interactive Demos</h2>
+                <p>Experience our development capabilities firsthand with live working demos</p>
+            </div>
+            <div class="demos-grid">
+                <div class="demo-card">
+                    <div class="demo-icon"><i class="fas fa-gamepad"></i></div>
+                    <h3>🌟 Meebo & Romi: Endless Runner</h3>
+                    <p>Play our fully-functional HTML5 endless runner game! Features multiple characters, power-ups, particle effects, and responsive controls. Built with pure JavaScript and Canvas API.</p>
+                    <div class="demo-preview"><i class="fas fa-play-circle"></i><span>Click to Play Now!</span></div>
+                    <button class="btn btn-primary demo-btn" onclick="openGameDemo()"><i class="fas fa-rocket"></i> Launch Game</button>
+                </div>
+                <div class="demo-card">
+                    <div class="demo-icon"><i class="fas fa-bug"></i></div>
+                    <h3>🐛 NS IPM Management System</h3>
+                    <p>Professional Integrated Pest Management software with GPS tracking, staff management, client portals, and comprehensive reporting. A complete business solution!</p>
+                    <div class="demo-preview"><i class="fas fa-desktop"></i><span>Login: admin / admin123</span></div>
+                    <button class="btn btn-primary demo-btn" onclick="openIPMDemo()"><i class="fas fa-external-link-alt"></i> Open IPM System</button>
+                </div>
+            </div>
+            <div style="text-align:center;margin-top:50px">
+                <p style="font-size:16px;color:var(--gray);margin-bottom:25px">Both demos are fully functional and showcase our expertise in custom software development</p>
+                <a href="#contact" class="btn btn-primary"><i class="fas fa-handshake"></i> Let's Build Your Custom Solution</a>
+            </div>
+        </div>
+    </section>
+
+    <div class="demo-modal" id="gameModal">
+        <div class="demo-modal-content">
+            <div class="demo-modal-header">
+                <h3>🎮 Meebo & Romi: Endless Runner</h3>
+                <button class="demo-close" onclick="closeGameDemo()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="demo-modal-body"><iframe id="gameFrame" src="about:blank"></iframe></div>
+            <div class="demo-modal-footer">
+                <button class="btn btn-outline" onclick="closeGameDemo()">Close Demo</button>
+                <button class="btn btn-primary" onclick="contactAbout('game')"><i class="fas fa-envelope"></i> Want a Custom Game?</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="demo-modal" id="ipmModal">
+        <div class="demo-modal-content">
+            <div class="demo-modal-header">
+                <h3>🐛 NS IPM Management System</h3>
+                <button class="demo-close" onclick="closeIPMDemo()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="demo-modal-body"><iframe id="ipmFrame" src="about:blank"></iframe></div>
+            <div class="demo-modal-footer">
+                <button class="btn btn-outline" onclick="closeIPMDemo()">Close Demo</button>
+                <button class="btn btn-primary" onclick="contactAbout('software')"><i class="fas fa-envelope"></i> Get Custom Software</button>
+            </div>
+        </div>
+    </div>
+
+    <section class="clients" id="clients">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Our Clients</span>
+                <h2>Trusted by Businesses Worldwide</h2>
+                <p>Serving clients across Pakistan, UAE, UK, USA, and more</p>
+            </div>
+            <div class="clients-logos">
+                <div class="client-flag"><span>🇵🇰</span> Pakistan</div>
+                <div class="client-flag"><span>🇦🇪</span> UAE</div>
+                <div class="client-flag"><span>🇬🇧</span> UK</div>
+                <div class="client-flag"><span>🇺🇸</span> USA</div>
+                <div class="client-flag"><span>🇨🇦</span> Canada</div>
+                <div class="client-flag"><span>🇦🇺</span> Australia</div>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <div class="testimonial-avatar">AK</div>
+                        <div class="testimonial-info"><h4>Ahmed Khan</h4><span>CEO, TechCorp Pakistan</span></div>
+                    </div>
+                    <div class="testimonial-rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p class="testimonial-text">"NSB Developer transformed our business with their custom ERP solution. The automation tools saved us countless hours. Highly professional!"</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <div class="testimonial-avatar">SA</div>
+                        <div class="testimonial-info"><h4>Sarah Ali</h4><span>Director, Dubai Enterprises</span></div>
+                    </div>
+                    <div class="testimonial-rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p class="testimonial-text">"Exceptional service from start to finish! The IPM system they built is exactly what we needed. Great communication and timely delivery."</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <div class="testimonial-avatar">MJ</div>
+                        <div class="testimonial-info"><h4>Michael Johnson</h4><span>Founder, UK Solutions Ltd</span></div>
+                    </div>
+                    <div class="testimonial-rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p class="testimonial-text">"Working with NSB Developer was a game-changer. Their business automation tools streamlined our entire workflow. Couldn't be happier!"</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Get In Touch</span>
+                <h2>Let's Start Your Project</h2>
+                <p>Ready to transform your business digitally? Contact us today!</p>
+            </div>
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <h3>Contact Information</h3>
+                    <p>Feel free to reach out through any of these channels. We're here to help bring your digital vision to life.</p>
+                    <ul class="contact-details">
+                        <li class="contact-detail"><div class="contact-icon"><i class="fas fa-user"></i></div><div class="contact-text"><h4>Founder & CEO</h4><p>Nouman Shah Bodla</p></div></li>
+                        <li class="contact-detail"><div class="contact-icon"><i class="fas fa-envelope"></i></div><div class="contact-text"><h4>Email Address</h4><p><a href="mailto:noumanshahft@gmail.com">noumanshahft@gmail.com</a></p></div></li>
+                        <li class="contact-detail"><div class="contact-icon"><i class="fab fa-whatsapp"></i></div><div class="contact-text"><h4>WhatsApp</h4><p><a href="https://wa.me/923144357050" target="_blank">+92 314 4357050</a></p></div></li>
+                        <li class="contact-detail"><div class="contact-icon"><i class="fas fa-clock"></i></div><div class="contact-text"><h4>Business Hours</h4><p>Mon - Sat: 9AM - 8PM PKT</p></div></li>
+                    </ul>
+                </div>
+                <form class="contact-form" id="contactForm">
+                    <div class="form-row">
+                        <div class="form-group"><label>Your Name *</label><input type="text" id="name" required placeholder="John Doe"></div>
+                        <div class="form-group"><label>Email Address *</label><input type="email" id="email" required placeholder="john@example.com"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Phone Number</label><input type="tel" id="phone" placeholder="+92 300 1234567"></div>
+                        <div class="form-group"><label>Service Required *</label><select id="service" required><option value="">Select a service</option><option value="custom-software">Custom Software</option><option value="game-dev">Game Development</option><option value="automation">Business Automation</option><option value="erp">ERP Solution</option><option value="website">Website Development</option><option value="other">Other</option></select></div>
+                    </div>
+                    <div class="form-group"><label>Project Details *</label><textarea id="message" required placeholder="Tell us about your project..."></textarea></div>
+                    <button type="submit" class="submit-btn"><i class="fas fa-paper-plane"></i> Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-about">
+                    <a href="#" class="logo"><div class="logo-icon">NSB</div><div class="logo-text"><h1>&lt;NSB Developer/&gt;</h1><span>HOME FOR INNOVATION</span></div></a>
+                    <p>We are passionate developers creating custom software solutions that transform businesses. From games to complete ERP systems, we solve your digital challenges.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                        <a href="https://wa.me/923144357050" class="social-link" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column"><h4>Quick Links</h4><ul><li><a href="#home">Home</a></li><li><a href="#services">Services</a></li><li><a href="#demos">Live Demos</a></li><li><a href="#contact">Contact</a></li></ul></div>
+                <div class="footer-column"><h4>Services</h4><ul><li><a href="#services">Custom Software</a></li><li><a href="#services">Game Development</a></li><li><a href="#services">Business Automation</a></li><li><a href="#services">ERP Solutions</a></li></ul></div>
+                <div class="footer-column"><h4>Contact</h4><ul><li><a href="mailto:noumanshahft@gmail.com">noumanshahft@gmail.com</a></li><li><a href="https://wa.me/923144357050">+92 314 4357050</a></li></ul></div>
+            </div>
+            <div class="footer-bottom"><p>&copy; 2024 NSB Developer. All Rights Reserved. Crafted with ❤️ by Nouman Shah Bodla</p></div>
+        </div>
+    </footer>
+
+    <button class="back-to-top" onclick="scrollToTop()"><i class="fas fa-arrow-up"></i></button>
+
+<script>
+// ==================== MAIN WEBSITE SCRIPTS ====================
+window.addEventListener('load',()=>{setTimeout(()=>{document.querySelector('.preloader').classList.add('hidden')},2000)});
+window.addEventListener('scroll',()=>{const h=document.querySelector('header');h.classList.toggle('scrolled',window.scrollY>100);document.querySelector('.back-to-top').classList.toggle('visible',window.scrollY>500)});
+document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',function(e){e.preventDefault();const t=document.querySelector(this.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth',block:'start'})})});
+function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'})}
+function openMobileNav(){document.getElementById('mobileNav').classList.add('active')}
+function closeMobileNav(){document.getElementById('mobileNav').classList.remove('active')}
+
+// ==================== GAME DEMO ====================
+function openGameDemo(){
+    const m=document.getElementById('gameModal');
+    const f=document.getElementById('gameFrame');
+    f.srcdoc=getGameHTML();
+    m.classList.add('active');
+    document.body.style.overflow='hidden';
+}
+function closeGameDemo(){
+    const m=document.getElementById('gameModal');
+    document.getElementById('gameFrame').srcdoc='';
+    m.classList.remove('active');
+    document.body.style.overflow='auto';
+}
+
+// ==================== IPM DEMO ====================
+function openIPMDemo(){
+    const m=document.getElementById('ipmModal');
+    const f=document.getElementById('ipmFrame');
+    f.srcdoc=getIPMHTML();
+    m.classList.add('active');
+    document.body.style.overflow='hidden';
+}
+function closeIPMDemo(){
+    const m=document.getElementById('ipmModal');
+    document.getElementById('ipmFrame').srcdoc='';
+    m.classList.remove('active');
+    document.body.style.overflow='auto';
+}
+
+function contactAbout(type){
+    closeGameDemo();
+    closeIPMDemo();
+    document.getElementById('service').value=type==='game'?'game-dev':'automation';
+    document.getElementById('message').value=type==='game'?'I am interested in developing a custom game similar to the Meebo & Romi demo.':'I am interested in a custom business management system similar to NS IPM.';
+    document.getElementById('contact').scrollIntoView({behavior:'smooth'});
+}
+
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeGameDemo();closeIPMDemo()}});
+
+document.getElementById('contactForm').addEventListener('submit',function(e){
+    e.preventDefault();
+    const n=document.getElementById('name').value;
+    const em=document.getElementById('email').value;
+    const p=document.getElementById('phone').value;
+    const s=document.getElementById('service').value;
+    const msg=document.getElementById('message').value;
+    const wa=`*New Project Inquiry - NSB Developer*%0A%0A*Name:* ${n}%0A*Email:* ${em}%0A*Phone:* ${p}%0A*Service:* ${s}%0A*Message:* ${msg}`;
+    window.open(`https://wa.me/923144357050?text=${wa}`,'_blank');
+    this.reset();
+    alert('Thank you! Your message has been sent via WhatsApp. We will contact you soon!');
+});
+
+// ==================== GAME HTML ====================
+function getGameHTML(){return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no"><title>Meebo & Romi</title><style>*{margin:0;padding:0;box-sizing:border-box;user-select:none;-webkit-tap-highlight-color:transparent}body{background:#1a1a2e;min-height:100vh;display:flex;justify-content:center;align-items:center;font-family:'Segoe UI',sans-serif;overflow:hidden}#gameWrapper{position:relative;width:100%;max-width:480px;height:100vh;max-height:800px}#gameCanvas{width:100%;height:100%;display:block}#startScreen,#gameOverScreen,#pauseScreen{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:100}#gameOverScreen,#pauseScreen{display:none}.title{font-size:28px;font-weight:bold;background:linear-gradient(45deg,#FF6B9D,#4ECDC4,#FFE66D);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:10px;text-align:center}.subtitle{color:#888;font-size:14px;margin-bottom:25px}.character-select{display:flex;gap:15px;margin-bottom:25px}.char-option{width:90px;height:120px;border-radius:15px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .3s;border:3px solid transparent}.char-option.meebo{background:linear-gradient(135deg,#FF6B9D33,#FF6B9D11)}.char-option.romi{background:linear-gradient(135deg,#4ECDC433,#4ECDC411)}.char-option.selected{border-color:#FFE66D;transform:scale(1.1);box-shadow:0 0 25px rgba(255,230,109,.3)}.char-avatar{width:50px;height:50px;border-radius:50%;margin-bottom:8px}.char-option.meebo .char-avatar{background:linear-gradient(135deg,#FF6B9D,#C44569)}.char-option.romi .char-avatar{background:linear-gradient(135deg,#4ECDC4,#2C9E8F)}.char-name{color:white;font-weight:bold;font-size:13px}.play-btn{background:linear-gradient(135deg,#FFE66D,#FFB347);color:#333;border:none;padding:12px 50px;font-size:18px;font-weight:bold;border-radius:25px;cursor:pointer;transition:all .3s;box-shadow:0 5px 15px rgba(255,230,109,.4)}.play-btn:hover{transform:translateY(-3px)}.controls-info{color:#666;font-size:11px;margin-top:20px;text-align:center;line-height:1.8}.controls-info span{display:inline-block;background:#333;padding:4px 10px;border-radius:6px;margin:2px;color:#fff}#hud{position:absolute;top:0;left:0;width:100%;padding:12px;display:none;justify-content:space-between;align-items:flex-start;z-index:50}.hud-left,.hud-right{display:flex;flex-direction:column;gap:6px}.hud-item{background:rgba(0,0,0,.6);backdrop-filter:blur(10px);padding:6px 12px;border-radius:15px;color:white;font-size:13px;display:flex;align-items:center;gap:6px}.hud-item.coins{color:#FFE66D}.hud-item.score{background:linear-gradient(135deg,rgba(255,107,157,.8),rgba(196,69,105,.8))}#pauseBtn{background:rgba(255,255,255,.2);border:none;width:36px;height:36px;border-radius:50%;color:white;font-size:16px;cursor:pointer}.power-indicator{position:absolute;top:70px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#667eea,#764ba2);padding:6px 16px;border-radius:15px;color:white;font-size:12px;font-weight:bold;display:none;z-index:50}.game-over-content{text-align:center}.final-score{font-size:42px;font-weight:bold;color:#FFE66D;margin:15px 0}.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:15px 0}.stat-box{background:rgba(255,255,255,.1);padding:12px;border-radius:12px}.stat-label{color:#888;font-size:11px}.stat-value{color:white;font-size:18px;font-weight:bold}.btn-group{display:flex;gap:12px;margin-top:15px}.secondary-btn{background:rgba(255,255,255,.2);color:white;border:none;padding:12px 25px;font-size:14px;border-radius:20px;cursor:pointer;transition:all .3s}.secondary-btn:hover{background:rgba(255,255,255,.3)}#mobileControls{position:absolute;bottom:15px;left:0;width:100%;display:none;justify-content:space-around;padding:0 15px;z-index:50}.mobile-btn{width:60px;height:60px;border-radius:50%;border:none;font-size:20px;cursor:pointer;transition:all .1s;box-shadow:0 4px 12px rgba(0,0,0,.3)}.mobile-btn:active{transform:scale(.9)}.mobile-btn.left{background:linear-gradient(135deg,#FF6B6B,#ee5a5a)}.mobile-btn.jump{background:linear-gradient(135deg,#4ECDC4,#3dbdb5);width:75px;height:75px;font-size:24px}.mobile-btn.right{background:linear-gradient(135deg,#95E1D3,#7dd3c4)}.mobile-btn.slide{background:linear-gradient(135deg,#FFE66D,#ffd93d)}.nsb-watermark{position:absolute;bottom:5px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.4);font-size:10px;z-index:200;text-align:center}.nsb-watermark a{color:#FFE66D;text-decoration:none}</style></head><body><div id="gameWrapper"><canvas id="gameCanvas"></canvas><div id="hud"><div class="hud-left"><div class="hud-item score">🏃 <span id="distance">0</span>m</div><div class="hud-item coins">💎 <span id="coins">0</span></div></div><div class="hud-right"><button id="pauseBtn">⏸️</button><div class="hud-item">x<span id="multiplier">1</span></div></div></div><div class="power-indicator" id="powerIndicator">🛡️ SHIELD</div><div id="startScreen"><div class="title">🌟 MEEBO & ROMI 🌟</div><div class="subtitle">Endless Runner Adventure</div><div class="character-select"><div class="char-option meebo selected" data-char="meebo"><div class="char-avatar"></div><div class="char-name">MEEBO</div></div><div class="char-option romi" data-char="romi"><div class="char-avatar"></div><div class="char-name">ROMI</div></div></div><button class="play-btn" id="startBtn">▶ PLAY</button><div class="controls-info"><span>⬅️ ➡️</span> Move <span>⬆️</span> Jump <span>⬇️</span> Slide</div></div><div id="gameOverScreen"><div class="game-over-content"><div class="title">GAME OVER</div><div class="final-score" id="finalScore">0</div><div class="stats-grid"><div class="stat-box"><div class="stat-label">DISTANCE</div><div class="stat-value" id="finalDistance">0m</div></div><div class="stat-box"><div class="stat-label">COINS</div><div class="stat-value" id="finalCoins">0</div></div><div class="stat-box"><div class="stat-label">HIGH SCORE</div><div class="stat-value" id="highScore">0</div></div><div class="stat-box"><div class="stat-label">BEST DIST</div><div class="stat-value" id="topDistance">0m</div></div></div><div class="btn-group"><button class="secondary-btn" id="homeBtn">🏠 HOME</button><button class="play-btn" id="retryBtn">🔄 RETRY</button></div></div></div><div id="pauseScreen"><div class="title">PAUSED</div><div class="btn-group"><button class="secondary-btn" id="quitBtn">🏠 QUIT</button><button class="play-btn" id="resumeBtn">▶ RESUME</button></div></div><div id="mobileControls"><button class="mobile-btn left" id="leftBtn">⬅️</button><button class="mobile-btn slide" id="slideBtn">⬇️</button><button class="mobile-btn jump" id="jumpBtn">⬆️</button><button class="mobile-btn right" id="rightBtn">➡️</button></div><div class="nsb-watermark">Developed by <a href="https://wa.me/923144357050" target="_blank">NSB Developer</a></div></div><script>const canvas=document.getElementById('gameCanvas');const ctx=canvas.getContext('2d');function resizeCanvas(){const w=document.getElementById('gameWrapper');canvas.width=w.clientWidth;canvas.height=w.clientHeight}resizeCanvas();window.addEventListener('resize',resizeCanvas);const LANE_COUNT=3,GAME_SPEED_INITIAL=8,GAME_SPEED_MAX=20,GRAVITY=0.8,JUMP_FORCE=-18;let gameState='start',selectedCharacter='meebo',score=0,coins=0,distance=0,multiplier=1,gameSpeed=GAME_SPEED_INITIAL,highScore=localStorage.getItem('meeboromi_highScore')||0,topDistance=localStorage.getItem('meeboromi_topDistance')||0;const player={lane:1,targetLane:1,x:0,y:0,width:50,height:80,velocityY:0,isJumping:false,isSliding:false,slideTimer:0,isInvincible:false,invincibleTimer:0,hasShield:false,shieldTimer:0,hasMagnet:false,magnetTimer:0,animFrame:0,animTimer:0};const track={vanishY:0,horizonY:0,laneWidth:0,groundY:0};let obstacles=[],collectibles=[],particles=[],trackLines=[],buildings=[],stars=[];const colors={meebo:{primary:'#FF6B9D',secondary:'#C44569',glow:'rgba(255,107,157,0.5)'},romi:{primary:'#4ECDC4',secondary:'#2C9E8F',glow:'rgba(78,205,196,0.5)'}};function initTrack(){track.horizonY=canvas.height*0.35;track.vanishY=track.horizonY;track.groundY=canvas.height*0.85;track.laneWidth=canvas.width*0.25;player.y=track.groundY;player.x=canvas.width/2;trackLines=[];for(let i=0;i<20;i++){trackLines.push({z:i*50,passed:false})}buildings=[];for(let i=0;i<15;i++){buildings.push({x:Math.random()>0.5?-100-Math.random()*200:canvas.width+Math.random()*200,z:i*80+Math.random()*40,width:60+Math.random()*80,height:100+Math.random()*150,color:\`hsl(\${240+Math.random()*40},30%,\${20+Math.random()*20}%)\`})}stars=[];for(let i=0;i<50;i++){stars.push({x:Math.random()*canvas.width,y:Math.random()*track.horizonY,size:Math.random()*2+1,twinkle:Math.random()*Math.PI*2})}}function getLaneX(lane,z=0){const p=Math.max(0.1,1-z/1000);const cx=canvas.width/2;const lo=(lane-1)*track.laneWidth*p;return cx+lo}function getYFromZ(z){const t=z/1000;return track.horizonY+(track.groundY-track.horizonY)*(1-t)}function getScaleFromZ(z){return Math.max(0.1,1-z/1000)}function spawnObstacle(){const types=['barrier','low','train','ramp'];const type=types[Math.floor(Math.random()*types.length)];const lane=Math.floor(Math.random()*3);let o={type:type,lane:lane,z:1000,width:60,height:type==='low'?40:(type==='train'?150:80),passed:false};if(Math.random()>0.7&&type!=='train'){obstacles.push(o);let sl=(lane+(Math.random()>0.5?1:2))%3;obstacles.push({...o,lane:sl,z:1000})}else{obstacles.push(o)}}function spawnCollectible(){const types=['coin','coin','coin','gem','shield','magnet','multiplier'];const type=types[Math.floor(Math.random()*types.length)];const lane=Math.floor(Math.random()*3);const floating=Math.random()>0.5;collectibles.push({type:type,lane:lane,z:1000,floating:floating,floatOffset:0,collected:false});if(type==='coin'&&Math.random()>0.5){for(let i=1;i<5;i++){collectibles.push({type:'coin',lane:lane,z:1000+i*80,floating:floating,floatOffset:i*0.3,collected:false})}}}function createParticle(x,y,color,count=10){for(let i=0;i<count;i++){particles.push({x:x,y:y,vx:(Math.random()-0.5)*10,vy:(Math.random()-0.5)*10-5,size:Math.random()*8+4,color:color,life:1})}}function update(dt){if(gameState!=='playing')return;gameSpeed=Math.min(GAME_SPEED_MAX,GAME_SPEED_INITIAL+distance/500);distance+=gameSpeed/10;score=Math.floor(distance*multiplier);document.getElementById('distance').textContent=Math.floor(distance);document.getElementById('coins').textContent=coins;document.getElementById('multiplier').textContent=multiplier;const tx=getLaneX(player.targetLane);player.x+=(tx-player.x)*0.2;player.lane=player.targetLane;if(player.isJumping){player.velocityY+=GRAVITY;player.y+=player.velocityY;if(player.y>=track.groundY){player.y=track.groundY;player.isJumping=false;player.velocityY=0}}if(player.isSliding){player.slideTimer-=dt;if(player.slideTimer<=0)player.isSliding=false}if(player.hasShield){player.shieldTimer-=dt;if(player.shieldTimer<=0){player.hasShield=false;document.getElementById('powerIndicator').style.display='none'}}if(player.hasMagnet){player.magnetTimer-=dt;if(player.magnetTimer<=0)player.hasMagnet=false}if(player.isInvincible){player.invincibleTimer-=dt;if(player.invincibleTimer<=0)player.isInvincible=false}player.animTimer+=dt;if(player.animTimer>100){player.animTimer=0;player.animFrame=(player.animFrame+1)%4}trackLines.forEach(l=>{l.z-=gameSpeed;if(l.z<0)l.z=1000});buildings.forEach(b=>{b.z-=gameSpeed*0.5;if(b.z<-100){b.z=800;b.x=Math.random()>0.5?-100-Math.random()*200:canvas.width+Math.random()*200}});if(Math.random()<0.02)spawnObstacle();if(Math.random()<0.03)spawnCollectible();obstacles=obstacles.filter(o=>{o.z-=gameSpeed;if(o.z<100&&o.z>-50&&o.lane===player.lane&&!o.passed){const ph=player.isSliding?player.height*0.4:player.height;if(o.type==='low'&&player.isJumping&&player.y<track.groundY-50){o.passed=true;score+=50;return true}if(o.type==='barrier'&&player.isSliding){o.passed=true;score+=50;return true}if(!player.isInvincible&&!player.hasShield){if(o.type==='low'&&!player.isJumping){gameOver()}else if(o.type!=='low'){gameOver()}}else if(player.hasShield){player.hasShield=false;player.isInvincible=true;player.invincibleTimer=1000;document.getElementById('powerIndicator').style.display='none';createParticle(player.x,player.y-player.height/2,'#FFE66D',20);o.passed=true}}return o.z>-100});collectibles=collectibles.filter(c=>{c.z-=gameSpeed;c.floatOffset+=0.1;if(player.hasMagnet&&c.z<300&&c.z>0){const tx=getLaneX(player.lane);const cx=getLaneX(c.lane,c.z);if(Math.abs(cx-tx)<150)c.lane=player.lane}if(c.z<80&&c.z>-20&&c.lane===player.lane&&!c.collected){c.collected=true;const cx=getLaneX(c.lane);const cy=getYFromZ(c.z)-(c.floating?80:30);switch(c.type){case'coin':coins+=1*multiplier;createParticle(cx,cy,'#FFE66D',5);break;case'gem':coins+=5*multiplier;createParticle(cx,cy,'#E056FD',10);break;case'shield':player.hasShield=true;player.shieldTimer=10000;document.getElementById('powerIndicator').textContent='🛡️ SHIELD';document.getElementById('powerIndicator').style.display='block';createParticle(cx,cy,'#4ECDC4',15);break;case'magnet':player.hasMagnet=true;player.magnetTimer=8000;document.getElementById('powerIndicator').textContent='🧲 MAGNET';document.getElementById('powerIndicator').style.display='block';createParticle(cx,cy,'#FF6B6B',15);break;case'multiplier':multiplier=Math.min(5,multiplier+1);createParticle(cx,cy,'#FFE66D',15);break}return false}return c.z>-50});particles=particles.filter(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=0.3;p.life-=0.02;p.size*=0.95;return p.life>0});stars.forEach(s=>s.twinkle+=0.05)}function draw(){ctx.fillStyle='#1a1a2e';ctx.fillRect(0,0,canvas.width,canvas.height);const sg=ctx.createLinearGradient(0,0,0,track.horizonY);sg.addColorStop(0,'#0f0c29');sg.addColorStop(0.5,'#302b63');sg.addColorStop(1,'#24243e');ctx.fillStyle=sg;ctx.fillRect(0,0,canvas.width,track.horizonY);stars.forEach(s=>{const a=0.5+Math.sin(s.twinkle)*0.5;ctx.fillStyle=\`rgba(255,255,255,\${a})\`;ctx.beginPath();ctx.arc(s.x,s.y,s.size,0,Math.PI*2);ctx.fill()});ctx.fillStyle='#f5f5f5';ctx.beginPath();ctx.arc(canvas.width*0.8,track.horizonY*0.3,35,0,Math.PI*2);ctx.fill();buildings.sort((a,b)=>b.z-a.z);buildings.forEach(b=>{if(b.z<0)return;const sc=getScaleFromZ(b.z);const y=getYFromZ(b.z);const x=b.x>canvas.width/2?canvas.width/2+(b.x-canvas.width/2)*sc:canvas.width/2-(canvas.width/2-b.x)*sc;const w=b.width*sc;const h=b.height*sc;ctx.fillStyle=b.color;ctx.fillRect(x-w/2,y-h,w,h);ctx.fillStyle=\`rgba(255,255,200,\${0.3+Math.random()*0.3})\`;const ws=5*sc;for(let wy=y-h+10*sc;wy<y-10*sc;wy+=15*sc){for(let wx=x-w/2+10*sc;wx<x+w/2-10*sc;wx+=12*sc){if(Math.random()>0.3)ctx.fillRect(wx,wy,ws,ws*1.5)}}});const gg=ctx.createLinearGradient(0,track.horizonY,0,canvas.height);gg.addColorStop(0,'#2d2d44');gg.addColorStop(1,'#1a1a2e');ctx.fillStyle=gg;ctx.fillRect(0,track.horizonY,canvas.width,canvas.height-track.horizonY);ctx.save();ctx.beginPath();ctx.moveTo(canvas.width/2-track.laneWidth*2,canvas.height);ctx.lineTo(canvas.width/2-track.laneWidth*0.3,track.horizonY);ctx.lineTo(canvas.width/2+track.laneWidth*0.3,track.horizonY);ctx.lineTo(canvas.width/2+track.laneWidth*2,canvas.height);ctx.closePath();const tg=ctx.createLinearGradient(0,track.horizonY,0,canvas.height);tg.addColorStop(0,'#3d3d5c');tg.addColorStop(1,'#4a4a6a');ctx.fillStyle=tg;ctx.fill();trackLines.forEach(l=>{if(l.z<0||l.z>1000)return;const y=getYFromZ(l.z);const sc=getScaleFromZ(l.z);const lx=canvas.width/2-track.laneWidth*1.5*sc;const rx=canvas.width/2+track.laneWidth*1.5*sc;ctx.strokeStyle=\`rgba(255,255,255,\${sc*0.3})\`;ctx.lineWidth=2*sc;ctx.beginPath();ctx.moveTo(lx,y);ctx.lineTo(rx,y);ctx.stroke()});for(let i=-1;i<=1;i+=2){ctx.strokeStyle='rgba(255,255,255,0.2)';ctx.lineWidth=2;ctx.setLineDash([20,20]);ctx.beginPath();ctx.moveTo(canvas.width/2+i*track.laneWidth*0.15,track.horizonY);ctx.lineTo(canvas.width/2+i*track.laneWidth,canvas.height);ctx.stroke();ctx.setLineDash([])}ctx.restore();const allObj=[...obstacles.map(o=>({...o,objType:'obstacle'})),...collectibles.map(c=>({...c,objType:'collectible'}))].sort((a,b)=>b.z-a.z);allObj.forEach(obj=>{if(obj.z<0||obj.z>1000)return;const sc=getScaleFromZ(obj.z);const x=getLaneX(obj.lane,obj.z);const y=getYFromZ(obj.z);if(obj.objType==='obstacle')drawObstacle(obj,x,y,sc);else drawCollectible(obj,x,y,sc)});drawPlayer();particles.forEach(p=>{ctx.globalAlpha=p.life;ctx.fillStyle=p.color;ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1});if(player.hasShield){ctx.strokeStyle='rgba(78,205,196,0.6)';ctx.lineWidth=3;ctx.beginPath();ctx.arc(player.x,player.y-player.height/2,player.width+10,0,Math.PI*2);ctx.stroke();ctx.fillStyle='rgba(78,205,196,0.1)';ctx.fill()}if(player.hasMagnet){const t=Date.now()/200;for(let i=0;i<3;i++){const r=30+i*20+Math.sin(t+i)*10;ctx.strokeStyle=\`rgba(255,107,107,\${0.3-i*0.1})\`;ctx.lineWidth=2;ctx.beginPath();ctx.arc(player.x,player.y-player.height/2,r,0,Math.PI*2);ctx.stroke()}}}function drawObstacle(o,x,y,sc){const w=o.width*sc;const h=o.height*sc;ctx.save();if(o.type==='barrier'){ctx.fillStyle='#e74c3c';ctx.fillRect(x-w/2,y-h,w,h);ctx.fillStyle='#c0392b';ctx.fillRect(x-w/2,y-h,w,h*0.2);ctx.fillStyle='#fff';for(let i=0;i<3;i++){ctx.fillRect(x-w/2+5*sc+i*20*sc,y-h*0.6,10*sc,h*0.3)}}else if(o.type==='low'){ctx.fillStyle='#f39c12';ctx.fillRect(x-w/2,y-h,w,h);ctx.fillStyle='#e67e22';ctx.fillRect(x-w/2,y-h,w,h*0.3);ctx.fillStyle='#2c3e50';for(let i=0;i<3;i++){ctx.fillRect(x-w/2+i*w/3,y-h,w/6,h)}}else if(o.type==='train'){ctx.fillStyle='#3498db';ctx.fillRect(x-w/2,y-h,w,h);ctx.fillStyle='#2980b9';ctx.fillRect(x-w/2,y-h,w,h*0.15);ctx.fillStyle='#85c1e9';for(let i=0;i<2;i++){ctx.fillRect(x-w/4+i*w/2.5,y-h*0.7,w*0.25,h*0.3)}}else if(o.type==='ramp'){ctx.fillStyle='#9b59b6';ctx.beginPath();ctx.moveTo(x-w/2,y);ctx.lineTo(x+w/2,y);ctx.lineTo(x+w/2,y-h);ctx.closePath();ctx.fill()}ctx.restore()}function drawCollectible(c,x,y,sc){if(c.collected)return;const fy=c.floating?-80*sc:-30*sc;const by=Math.sin(c.floatOffset+Date.now()/200)*5*sc;const fY=y+fy+by;const sz=25*sc;ctx.save();ctx.translate(x,fY);if(c.type==='coin'){ctx.fillStyle='#FFE66D';ctx.beginPath();ctx.arc(0,0,sz/2,0,Math.PI*2);ctx.fill();ctx.fillStyle='#FFD93D';ctx.beginPath();ctx.arc(-2*sc,-2*sc,sz/4,0,Math.PI*2);ctx.fill()}else if(c.type==='gem'){ctx.fillStyle='#E056FD';ctx.beginPath();ctx.moveTo(0,-sz/2);ctx.lineTo(sz/2,0);ctx.lineTo(0,sz/2);ctx.lineTo(-sz/2,0);ctx.closePath();ctx.fill();ctx.fillStyle='#BE2EDD';ctx.beginPath();ctx.moveTo(0,-sz/2);ctx.lineTo(sz/4,0);ctx.lineTo(0,sz/4);ctx.lineTo(-sz/4,0);ctx.closePath();ctx.fill()}else if(c.type==='shield'){ctx.fillStyle='#4ECDC4';ctx.beginPath();ctx.moveTo(0,-sz/2);ctx.lineTo(sz/2,-sz/4);ctx.lineTo(sz/2,sz/4);ctx.lineTo(0,sz/2);ctx.lineTo(-sz/2,sz/4);ctx.lineTo(-sz/2,-sz/4);ctx.closePath();ctx.fill();ctx.fillStyle='#fff';ctx.font=\`\${sz*0.5}px Arial\`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🛡️',0,0)}else if(c.type==='magnet'){ctx.fillStyle='#FF6B6B';ctx.beginPath();ctx.arc(0,0,sz/2,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.font=\`\${sz*0.6}px Arial\`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🧲',0,0)}else if(c.type==='multiplier'){ctx.fillStyle='#FFE66D';ctx.beginPath();ctx.arc(0,0,sz/2,0,Math.PI*2);ctx.fill();ctx.fillStyle='#333';ctx.font=\`bold \${sz*0.5}px Arial\`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('x2',0,2)}ctx.restore()}function drawPlayer(){const cc=colors[selectedCharacter];const h=player.isSliding?player.height*0.4:player.height;const y=player.y-(player.isSliding?player.height*0.2:0);ctx.save();ctx.translate(player.x,y);if(player.isInvincible&&Math.floor(Date.now()/100)%2===0)ctx.globalAlpha=0.5;ctx.fillStyle='rgba(0,0,0,0.3)';ctx.beginPath();ctx.ellipse(0,5,player.width/2,15,0,0,Math.PI*2);ctx.fill();ctx.shadowColor=cc.glow;ctx.shadowBlur=20;ctx.fillStyle=cc.primary;if(player.isSliding){ctx.beginPath();ctx.ellipse(0,-h/2,player.width/2,h/2,0,0,Math.PI*2);ctx.fill()}else{const bn=Math.sin(player.animFrame*Math.PI/2)*3;ctx.beginPath();ctx.ellipse(0,-h/2-bn,player.width/2,h/2,0,0,Math.PI*2);ctx.fill();const la=Math.sin(player.animFrame*Math.PI/2)*0.4;ctx.fillStyle=cc.secondary;ctx.save();ctx.translate(-10,-15);ctx.rotate(la);ctx.fillRect(-5,0,10,20);ctx.restore();ctx.save();ctx.translate(10,-15);ctx.rotate(-la);ctx.fillRect(-5,0,10,20);ctx.restore()}ctx.shadowBlur=0;const fY=player.isSliding?-h/2:-h/2-(Math.sin(player.animFrame*Math.PI/2)*3);ctx.fillStyle=cc.primary;ctx.beginPath();ctx.ellipse(-15,fY-25,10,15,-0.3,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.ellipse(15,fY-25,10,15,0.3,0,Math.PI*2);ctx.fill();ctx.fillStyle=cc.secondary;ctx.beginPath();ctx.ellipse(-15,fY-25,5,8,-0.3,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.ellipse(15,fY-25,5,8,0.3,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.beginPath();ctx.ellipse(-10,fY-5,8,10,0,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.ellipse(10,fY-5,8,10,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#333';ctx.beginPath();ctx.arc(-8,fY-3,4,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(12,fY-3,4,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(-6,fY-6,2,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(14,fY-6,2,0,Math.PI*2);ctx.fill();ctx.fillStyle='rgba(255,150,150,0.5)';ctx.beginPath();ctx.ellipse(-18,fY+5,6,4,0,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.ellipse(18,fY+5,6,4,0,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#333';ctx.lineWidth=2;ctx.lineCap='round';ctx.beginPath();if(player.isJumping){ctx.arc(0,fY+10,8,0,Math.PI)}else{ctx.arc(0,fY+8,6,0.1*Math.PI,0.9*Math.PI)}ctx.stroke();ctx.fillStyle=cc.secondary;ctx.beginPath();ctx.ellipse(0,fY+3,4,3,0,0,Math.PI*2);ctx.fill();ctx.restore()}function gameOver(){gameState='gameOver';if(score>highScore){highScore=score;localStorage.setItem('meeboromi_highScore',highScore)}if(distance>topDistance){topDistance=Math.floor(distance);localStorage.setItem('meeboromi_topDistance',topDistance)}document.getElementById('finalScore').textContent=score;document.getElementById('finalDistance').textContent=Math.floor(distance)+'m';document.getElementById('finalCoins').textContent=coins;document.getElementById('highScore').textContent=highScore;document.getElementById('topDistance').textContent=topDistance+'m';document.getElementById('gameOverScreen').style.display='flex';document.getElementById('hud').style.display='none';document.getElementById('mobileControls').style.display='none'}function startGame(){gameState='playing';score=0;coins=0;distance=0;multiplier=1;gameSpeed=GAME_SPEED_INITIAL;player.lane=1;player.targetLane=1;player.x=canvas.width/2;player.y=track.groundY;player.isJumping=false;player.isSliding=false;player.hasShield=false;player.hasMagnet=false;player.isInvincible=false;obstacles=[];collectibles=[];particles=[];document.getElementById('startScreen').style.display='none';document.getElementById('gameOverScreen').style.display='none';document.getElementById('pauseScreen').style.display='none';document.getElementById('hud').style.display='flex';document.getElementById('powerIndicator').style.display='none';if('ontouchstart' in window){document.getElementById('mobileControls').style.display='flex'}initTrack()}function pauseGame(){if(gameState==='playing'){gameState='paused';document.getElementById('pauseScreen').style.display='flex'}}function resumeGame(){if(gameState==='paused'){gameState='playing';document.getElementById('pauseScreen').style.display='none'}}function moveLeft(){if(gameState==='playing'&&player.targetLane>0){player.targetLane--;createParticle(player.x,player.y-player.height/2,colors[selectedCharacter].primary,5)}}function moveRight(){if(gameState==='playing'&&player.targetLane<2){player.targetLane++;createParticle(player.x,player.y-player.height/2,colors[selectedCharacter].primary,5)}}function jump(){if(gameState==='playing'&&!player.isJumping&&!player.isSliding){player.isJumping=true;player.velocityY=JUMP_FORCE;createParticle(player.x,player.y,'#fff',10)}}function slide(){if(gameState==='playing'&&!player.isJumping&&!player.isSliding){player.isSliding=true;player.slideTimer=500;createParticle(player.x,player.y-20,'#fff',8)}}document.addEventListener('keydown',e=>{switch(e.code){case'ArrowLeft':case'KeyA':moveLeft();break;case'ArrowRight':case'KeyD':moveRight();break;case'ArrowUp':case'KeyW':case'Space':e.preventDefault();jump();break;case'ArrowDown':case'KeyS':slide();break;case'Escape':if(gameState==='playing')pauseGame();else if(gameState==='paused')resumeGame();break}});let touchStartX=0,touchStartY=0;canvas.addEventListener('touchstart',e=>{touchStartX=e.touches[0].clientX;touchStartY=e.touches[0].clientY});canvas.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-touchStartX;const dy=e.changedTouches[0].clientY-touchStartY;if(Math.abs(dx)>Math.abs(dy)){if(dx>50)moveRight();else if(dx<-50)moveLeft()}else{if(dy<-50)jump();else if(dy>50)slide()}});document.getElementById('startBtn').addEventListener('click',startGame);document.getElementById('retryBtn').addEventListener('click',startGame);document.getElementById('homeBtn').addEventListener('click',()=>{document.getElementById('gameOverScreen').style.display='none';document.getElementById('startScreen').style.display='flex'});document.getElementById('pauseBtn').addEventListener('click',pauseGame);document.getElementById('resumeBtn').addEventListener('click',resumeGame);document.getElementById('quitBtn').addEventListener('click',()=>{gameState='start';document.getElementById('pauseScreen').style.display='none';document.getElementById('hud').style.display='none';document.getElementById('mobileControls').style.display='none';document.getElementById('startScreen').style.display='flex'});document.getElementById('leftBtn').addEventListener('click',moveLeft);document.getElementById('rightBtn').addEventListener('click',moveRight);document.getElementById('jumpBtn').addEventListener('click',jump);document.getElementById('slideBtn').addEventListener('click',slide);document.querySelectorAll('.char-option').forEach(opt=>{opt.addEventListener('click',()=>{document.querySelectorAll('.char-option').forEach(o=>o.classList.remove('selected'));opt.classList.add('selected');selectedCharacter=opt.dataset.char})});let lastTime=0;function gameLoop(ts){const dt=ts-lastTime;lastTime=ts;update(dt);draw();requestAnimationFrame(gameLoop)}initTrack();requestAnimationFrame(gameLoop);<\/script></body></html>`;}
+
+// ==================== IPM HTML ====================
+function getIPMHTML(){return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>NS IPM System</title><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><style>:root{--p:#004080;--s:#002b55;--g:#28a745;--r:#dc3545}*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Segoe UI',system-ui,sans-serif;background:#f0f2f5}.hide{display:none!important}.login-page{min-height:100vh;background:linear-gradient(135deg,var(--p),var(--s));display:flex;align-items:center;justify-content:center;padding:20px}.login-box{background:#fff;border-radius:16px;padding:40px 30px;width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,.3)}.login-box h2{color:var(--p);text-align:center;margin-bottom:8px;font-weight:700}.login-box .subtitle{text-align:center;color:#666;margin-bottom:30px}.login-box .form-control{padding:12px 15px;border-radius:8px}.login-box .btn-primary{padding:12px;border-radius:8px;font-weight:600}.app-container{display:flex;min-height:100vh}.sidebar{width:260px;background:linear-gradient(180deg,var(--p),var(--s));color:#fff;position:fixed;height:100vh;overflow-y:auto;z-index:100;transition:transform .3s}.sidebar.closed{transform:translateX(-260px)}.sidebar-header{padding:20px;border-bottom:1px solid rgba(255,255,255,.1)}.sidebar-header h4{margin:0;font-size:1.3rem}.nav-menu{padding:15px 0}.nav-link{display:flex;align-items:center;padding:12px 20px;color:rgba(255,255,255,.8);text-decoration:none;border-left:3px solid transparent;transition:all .2s}.nav-link:hover,.nav-link.active{background:rgba(255,255,255,.1);color:#fff;border-left-color:#ffc107}.nav-link i{width:24px;margin-right:12px}.nav-section{padding:15px 20px 8px;font-size:.7rem;text-transform:uppercase;opacity:.5}.main-content{flex:1;margin-left:260px;transition:margin .3s}.main-content.full{margin-left:0}.topbar{background:#fff;padding:15px 25px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 10px rgba(0,0,0,.05);position:sticky;top:0;z-index:50}.menu-toggle{background:none;border:none;font-size:1.4rem;color:var(--p);cursor:pointer}.user-info{display:flex;align-items:center;gap:12px}.user-avatar{width:40px;height:40px;border-radius:50%;background:var(--p);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700}.page-content{padding:25px}.page-title{margin-bottom:20px;color:#333}.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin-bottom:25px}.stat-card{background:#fff;border-radius:12px;padding:25px;display:flex;align-items:center;gap:20px;box-shadow:0 2px 15px rgba(0,0,0,.05)}.stat-icon{width:60px;height:60px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:#fff}.stat-icon.blue{background:linear-gradient(135deg,#667eea,#764ba2)}.stat-icon.green{background:linear-gradient(135deg,#11998e,#38ef7d)}.stat-icon.orange{background:linear-gradient(135deg,#f093fb,#f5576c)}.stat-icon.purple{background:linear-gradient(135deg,#4facfe,#00f2fe)}.stat-info h3{font-size:2rem;margin:0;color:#333}.stat-info p{margin:0;color:#888}.card{background:#fff;border:none;border-radius:12px;box-shadow:0 2px 15px rgba(0,0,0,.05);margin-bottom:20px}.card-header{background:var(--p);color:#fff;padding:15px 20px;border-radius:12px 12px 0 0!important;font-weight:600}.card-body{padding:20px}.toast-box{position:fixed;top:20px;right:20px;z-index:9999}.toast-item{background:#fff;border-radius:10px;padding:15px 20px;box-shadow:0 5px 20px rgba(0,0,0,.15);margin-bottom:10px;display:flex;align-items:center;gap:12px;animation:slideIn .3s}.toast-item.success{border-left:4px solid var(--g)}.toast-item.error{border-left:4px solid var(--r)}@keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}.storage-badge{position:fixed;bottom:20px;right:20px;padding:10px 18px;border-radius:25px;font-size:.85rem;display:flex;align-items:center;gap:10px;z-index:9999;box-shadow:0 3px 15px rgba(0,0,0,.1);background:#d4edda;color:#155724}.storage-dot{width:10px;height:10px;border-radius:50%;background:#28a745;animation:pulse 1.5s infinite}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99}.overlay.show{display:block}.nsb-badge{position:fixed;bottom:20px;left:20px;background:linear-gradient(135deg,#4facfe,#00f2fe);color:#fff;padding:8px 15px;border-radius:20px;font-size:12px;z-index:9999;box-shadow:0 3px 15px rgba(0,0,0,.2)}.nsb-badge a{color:#fff;text-decoration:none}@media(max-width:768px){.sidebar{transform:translateX(-260px)}.sidebar.open{transform:translateX(0)}.main-content{margin-left:0}.stats-grid{grid-template-columns:1fr 1fr}}</style></head><body><div class="toast-box" id="toastBox"></div><div class="storage-badge"><div class="storage-dot"></div><span>Local Storage</span></div><div class="nsb-badge">Developed by <a href="https://wa.me/923144357050" target="_blank">NSB Developer</a></div><div id="loginPage" class="login-page"><div class="login-box"><h2><i class="fas fa-bug me-2"></i>NS IPM</h2><p class="subtitle">Integrated Pest Management System</p><form id="loginForm"><div id="loginError" class="alert alert-danger hide"></div><div class="mb-3"><label class="form-label fw-bold">Username</label><input type="text" id="loginUser" class="form-control" required value="admin"></div><div class="mb-3"><label class="form-label fw-bold">Password</label><input type="password" id="loginPass" class="form-control" required value="admin123"></div><button type="submit" class="btn btn-primary w-100"><i class="fas fa-sign-in-alt me-2"></i>Login</button><div class="mt-3 text-center"><small class="text-muted">Default: admin / admin123</small></div></form></div></div><div id="mainApp" class="hide"><div class="overlay" id="overlay" onclick="toggleSidebar()"></div><aside class="sidebar" id="sidebar"><div class="sidebar-header"><h4><i class="fas fa-bug me-2"></i>NS IPM</h4></div><nav class="nav-menu"><a href="#" class="nav-link active" data-page="dashboard"><i class="fas fa-home"></i>Dashboard</a><a href="#" class="nav-link" data-page="dataentry"><i class="fas fa-edit"></i>Data Entry</a><a href="#" class="nav-link" data-page="records"><i class="fas fa-file-alt"></i>Records</a><div class="nav-section">Administration</div><a href="#" class="nav-link" data-page="staff"><i class="fas fa-users"></i>Staff</a><a href="#" class="nav-link" data-page="projects"><i class="fas fa-building"></i>Projects</a><div class="nav-section">Account</div><a href="#" class="nav-link" data-page="settings"><i class="fas fa-cog"></i>Settings</a><a href="#" class="nav-link" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i>Logout</a></nav></aside><main class="main-content" id="mainContent"><header class="topbar"><button class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button><div class="user-info"><div class="text-end d-none d-md-block"><div class="fw-bold" id="headerUserName">Admin</div><small class="text-muted" id="headerUserRole">Administrator</small></div><div class="user-avatar" id="headerUserAvatar">A</div></div></header><div class="page-content"><div id="page-dashboard" class="page-section"><h4 class="page-title"><i class="fas fa-home me-2"></i>Dashboard</h4><div class="stats-grid" id="dashStats"></div><div class="card"><div class="card-header"><i class="fas fa-info-circle me-2"></i>Welcome to NS IPM System</div><div class="card-body"><p>This is a demo of our Integrated Pest Management System. Features include:</p><ul><li>✅ Staff Management</li><li>✅ Project Tracking</li><li>✅ GPS-based Attendance</li><li>✅ Multiple Data Entry Forms</li><li>✅ Comprehensive Reporting</li><li>✅ Local Storage (works offline)</li></ul><p class="mt-3 mb-0"><strong>Explore the sidebar to see all features!</strong></p></div></div></div><div id="page-dataentry" class="page-section hide"><h4 class="page-title"><i class="fas fa-edit me-2"></i>Data Entry</h4><div class="card"><div class="card-body"><p>Select a project and form type to begin data entry.</p><div class="row g-3"><div class="col-md-6"><div class="card bg-light"><div class="card-body text-center"><i class="fas fa-clipboard-user fa-3x text-primary mb-3"></i><h5>Attendance</h5><small class="text-muted">GPS-verified attendance</small></div></div></div><div class="col-md-6"><div class="card bg-light"><div class="card-body text-center"><i class="fas fa-spray-can fa-3x text-success mb-3"></i><h5>Insecticide Log</h5><small class="text-muted">Track chemical usage</small></div></div></div><div class="col-md-6"><div class="card bg-light"><div class="card-body text-center"><i class="fas fa-box-open fa-3x text-warning mb-3"></i><h5>Glue Box Monitoring</h5><small class="text-muted">Pest monitoring</small></div></div></div><div class="col-md-6"><div class="card bg-light"><div class="card-body text-center"><i class="fas fa-tasks fa-3x text-info mb-3"></i><h5>IPM Checklist</h5><small class="text-muted">Daily inspection</small></div></div></div></div></div></div></div><div id="page-records" class="page-section hide"><h4 class="page-title"><i class="fas fa-file-alt me-2"></i>Records</h4><div class="card"><div class="card-body"><p class="text-muted">View and filter all submitted records here.</p><table class="table"><thead><tr><th>Date</th><th>Type</th><th>Project</th><th>Status</th></tr></thead><tbody><tr><td colspan="4" class="text-center text-muted">No records yet</td></tr></tbody></table></div></div></div><div id="page-staff" class="page-section hide"><h4 class="page-title"><i class="fas fa-users me-2"></i>Staff Management</h4><div class="card"><div class="card-body"><button class="btn btn-primary mb-3"><i class="fas fa-plus me-1"></i>Add Staff</button><table class="table"><thead><tr><th>ID</th><th>Name</th><th>Role</th><th>Status</th></tr></thead><tbody><tr><td>EMP001</td><td>Admin User</td><td>Administrator</td><td><span class="badge bg-success">Active</span></td></tr><tr><td>EMP002</td><td>Demo Staff</td><td>Technician</td><td><span class="badge bg-success">Active</span></td></tr></tbody></table></div></div></div><div id="page-projects" class="page-section hide"><h4 class="page-title"><i class="fas fa-building me-2"></i>Projects</h4><div class="card"><div class="card-body"><button class="btn btn-primary mb-3"><i class="fas fa-plus me-1"></i>Add Project</button><table class="table"><thead><tr><th>Code</th><th>Name</th><th>Client</th><th>GPS</th></tr></thead><tbody><tr><td>PRJ001</td><td>Demo Project</td><td>Demo Client</td><td><span class="badge bg-success">Enabled</span></td></tr></tbody></table></div></div></div><div id="page-settings" class="page-section hide"><h4 class="page-title"><i class="fas fa-cog me-2"></i>Settings</h4><div class="row"><div class="col-md-6"><div class="card"><div class="card-header"><i class="fas fa-user me-2"></i>My Profile</div><div class="card-body"><div class="mb-3"><label class="form-label">Name</label><input type="text" class="form-control" value="Administrator"></div><div class="mb-3"><label class="form-label">New Password</label><input type="password" class="form-control" placeholder="Leave empty to keep current"></div><button class="btn btn-primary"><i class="fas fa-save me-1"></i>Save Changes</button></div></div></div><div class="col-md-6"><div class="card"><div class="card-header"><i class="fas fa-database me-2"></i>Data Management</div><div class="card-body"><button class="btn btn-outline-success w-100 mb-2"><i class="fas fa-download me-1"></i>Export All Data</button><button class="btn btn-outline-primary w-100 mb-2"><i class="fas fa-upload me-1"></i>Import Data</button><button class="btn btn-outline-danger w-100"><i class="fas fa-trash me-1"></i>Clear All Data</button></div></div></div></div></div></div></main></div><script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"><\/script><script>const $=id=>document.getElementById(id);let currentUser={name:'Administrator',role:'admin'};function showToast(msg,type='success'){const t=document.createElement('div');t.className='toast-item '+type;t.innerHTML='<i class="fas fa-'+(type==='success'?'check-circle text-success':'times-circle text-danger')+'"></i><span>'+msg+'</span>';$('toastBox').appendChild(t);setTimeout(()=>t.remove(),4000)}$('loginForm').addEventListener('submit',function(e){e.preventDefault();const u=$('loginUser').value;const p=$('loginPass').value;if(u==='admin'&&p==='admin123'){$('loginPage').classList.add('hide');$('mainApp').classList.remove('hide');showToast('Welcome, Administrator!');loadDashboard()}else{$('loginError').textContent='Invalid credentials';$('loginError').classList.remove('hide')}});function doLogout(){location.reload()}function toggleSidebar(){const s=$('sidebar');const o=$('overlay');const m=$('mainContent');if(window.innerWidth<769){s.classList.toggle('open');o.classList.toggle('show')}else{s.classList.toggle('closed');m.classList.toggle('full')}}document.querySelectorAll('.nav-link[data-page]').forEach(link=>{link.addEventListener('click',function(e){e.preventDefault();const page=this.dataset.page;document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));this.classList.add('active');document.querySelectorAll('.page-section').forEach(s=>s.classList.add('hide'));const target=$('page-'+page);if(target)target.classList.remove('hide');if(window.innerWidth<769)toggleSidebar()})});function loadDashboard(){$('dashStats').innerHTML='<div class="stat-card"><div class="stat-icon blue"><i class="fas fa-building"></i></div><div class="stat-info"><h3>5</h3><p>Active Projects</p></div></div><div class="stat-card"><div class="stat-icon green"><i class="fas fa-users"></i></div><div class="stat-info"><h3>12</h3><p>Active Staff</p></div></div><div class="stat-card"><div class="stat-icon orange"><i class="fas fa-clipboard-check"></i></div><div class="stat-info"><h3>48</h3><p>Today\\'s Entries</p></div></div><div class="stat-card"><div class="stat-icon purple"><i class="fas fa-file-alt"></i></div><div class="stat-info"><h3>1,234</h3><p>Total Records</p></div></div>'}<\/script></body></html>`;}
+</script>
+</body>
+</html>
